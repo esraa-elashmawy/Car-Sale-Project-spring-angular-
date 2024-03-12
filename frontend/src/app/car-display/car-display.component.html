@@ -1,0 +1,70 @@
+
+<div class="card">
+    <p-dataView #dv [value]="cars" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField"
+        [sortOrder]="sortOrder" layout="grid">
+
+        <ng-template let-product pTemplate="gridItem">
+            <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
+                <div class="p-4 border-1 surface-border surface-card border-round">
+                    <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="product-grid-item card" (click)="viewCarDetails(product)">
+                            <div class="product-grid-item-content">
+                                <img class="w-9 sm:w-16rem xl:w-18rem shadow-2 block xl:block mx-auto border-round"
+                                    [src]="product.picture" [alt]="product.name" />
+                                <div class="text-center text-2xl font-bold text-900">{{product.brand}}-{{product.model}}
+                                    {{product.year}} </div>
+                                <div>
+                                    <span class="text-green-400 font-semibold"> {{product.price}}</span>
+                                    <span class="text-gray-400 text-sm w-2 font-semibold"> EGP</span>
+                                </div>
+                                <div class="font-semibold">
+                                    <span class="text-left"> {{product.type}}</span>
+                                    <span class="text-right"> {{product.km}} km</span>
+                                </div>
+                            </div>
+                            <!-- <div class="product-grid-item-bottom">
+                        <span class="product-price">${{product.price}}</span>
+                        <p-button icon="pi pi-shopping-cart" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></p-button>
+                    </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataView>
+</div>
+
+
+<p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" [header]="carHeader" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <img [src]=" car.picture" [alt]="car.model" class="block m-auto pb-3" *ngIf="car.model" />
+        <div class="field">
+            <label>Year: {{car.year}}</label>
+        </div>
+        <div class="field">
+            <label>KM: {{car.km}}</label>
+        </div>
+        <div class="field">
+            <label>Type: {{car.type}}</label>
+        </div>
+        <div class="field">
+            <label>Report: {{car.inspectionReport}}</label>
+        </div>
+        <div class="field">
+            <label >Price: {{car.price}} EGP</label>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        
+        <div class="card flex justify-content-center" >
+            <p-selectButton [options]="dayOptions"   optionLabel="name" optionValue="value" (onChange)="choseDay($event)"></p-selectButton>
+            </div>
+            
+            <div class="card flex justify-content-center" *ngIf="showTime">
+                <p-selectButton optionDisabled="constant" [options]="timeOptions" [(ngModel)]="res"  optionLabel="name" optionValue="value" (onChange)="choseTime($event)"></p-selectButton>
+            </div>
+        <!-- <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button> -->
+        <button pButton pRipple label="Book Visit" icon="pi pi-times" routerLink="/signin" class="p-button-text" [disabled]="book" (click)="bookVisit()"></button>
+    </ng-template>
+</p-dialog>

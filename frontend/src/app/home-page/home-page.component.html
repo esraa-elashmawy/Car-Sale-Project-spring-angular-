@@ -1,0 +1,11 @@
+<div class="header">
+    <div>
+        <button (click)="changeLangage('ar')">Arabic</button>
+        <button (click)="changeLangage('en')">English</button>
+        <h3 translate>Hello</h3>
+     </div>
+    <p-toolbar aria-label="Actions">
+        <p-button translate  [link]="true" routerLink="/signin">Login</p-button>
+    </p-toolbar>
+</div>
+<app-car-display></app-car-display>

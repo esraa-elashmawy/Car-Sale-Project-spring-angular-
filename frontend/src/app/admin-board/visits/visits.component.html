@@ -1,0 +1,30 @@
+<p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+        <p-button label="View Cars" [link]="true" routerLink="/admin"></p-button>
+    </ng-template>
+    <ng-template pTemplate="right">
+        <button pButton pRipple label="Log Out"  class="p-button-success mr-2" (click)="logOut()"></button>
+    </ng-template>
+</p-toolbar>
+
+<p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Car</th>
+            <th>Visitor Name</th>
+            <th>Visitor Mobile Number</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-visit>
+        <tr>
+            <td>{{visit.dateTime |  date:'yyyy-MM-dd'}}</td>
+            <td>{{visit.dateTime |  date:' hh:mm'}}</td>
+
+            <td>{{ visit.car_id.brand }}- {{ visit.car_id.model }}- {{ visit.car_id.year }}</td>
+            <td>{{ visit.buyer.fullName }}</td>
+            <td>{{ visit.buyer.mobileNumber }}</td>
+        </tr>
+    </ng-template>
+</p-table>

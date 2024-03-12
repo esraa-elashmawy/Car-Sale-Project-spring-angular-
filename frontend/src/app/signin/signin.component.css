@@ -1,0 +1,6 @@
+.surface-card {
+    margin: 0 auto; /* Horizontally centers the element */
+    position: relative; /* Required for transform property */
+    top: 50%; /* Vertically centers the element */
+    transform: translateY(50%); /* Vertically centers the element */
+  }

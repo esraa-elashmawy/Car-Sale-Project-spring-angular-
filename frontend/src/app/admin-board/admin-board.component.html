@@ -1,0 +1,177 @@
+<p-toast></p-toast>
+<p-toolbar styleClass="mb-4 gap-2">
+    <button (click)="changeLangage('ar')">Arabic</button>
+    <button (click)="changeLangage('en')">English</button>
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+            (click)="openNew()"></button>
+        <p-button label="View Visit Bookings" [link]="true" routerLink="visits"></p-button>
+    </ng-template>
+    <ng-template pTemplate="right">
+        <button pButton pRipple label="Log Out" class="p-button-success mr-2" (click)="logOut()"></button>
+    </ng-template>
+
+</p-toolbar>
+
+<p-table #dt [value]="cars" [rows]="10" [paginator]="true"
+    [globalFilterFields]="['brand','model', 'year', 'km', 'type','price']" [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedCars" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+            <h5 class="m-0">Manage Cars</h5>
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" #searchInput (input)="dt.filterGlobal(searchInput.value, 'contains')"
+                    placeholder="Search..." />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th translate pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th translate>Image</th>
+            <th translate pSortableColumn="year">Year <p-sortIcon field="price"></p-sortIcon></th>
+            <th translate pSortableColumn="km">KM <p-sortIcon field="km"></p-sortIcon></th>
+            <th translate pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+            <th translate>Type</th>
+            <th translate>Report</th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td>{{ product.brand }}- {{ product.model }}</td>
+            <td><img [src]="product.picture" [alt]="product.name" width="50" class="shadow-4" /></td>
+            <td>{{ product.year }}</td>
+            <td>{{ product.km }}</td>
+            <td>{{ product.price | currency: 'EP ' }}</td>
+            <td>{{ product.type}}</td>
+            <td>{{ product.inspectionReport}}</td>
+            <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                    (click)="editProduct(product)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                    (click)="deleteCar(product)"></button>
+
+            </td>
+        </tr>
+    </ng-template>
+    <!-- <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">In total there are {{ products ? products.length : 0 }} products.</div>
+    </ng-template> -->
+</p-table>
+
+
+<p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Edit Car Details" [modal]="true"
+    styleClass="p-fluid">
+    <form (ngSubmit)="onAddCar(f)" #f="ngForm">
+        <div class="field">
+            <label for="picture">Picture</label>
+            <img [src]="editedCar.picture" alt="unable to load" class="block m-auto pb-3" *ngIf="editedCar.picture" />
+            <input  type="text" pInputText id="picture" name="picture" [(ngModel)]="editedCar.picture"   />
+        </div>
+        <div class="field">
+            <label for="brand">Brand</label>
+            <input type="text" pInputText id="brand"  name="brand" [(ngModel)]="editedCar.brand" required/>
+        </div>
+        <div class="field">
+            <label for="model">Model</label>
+            <input type="text" pInputText id="model"  name="model" [(ngModel)]="editedCar.model" required/>
+        </div>
+        <div class="field">
+            <label for="year">Year</label>
+            <input type="number" pInputText id="year"  name="year" [(ngModel)]="editedCar.year" required/>
+        </div>
+        <div class="field">
+            <label for="km">KM</label>
+            <input type="number" pInputText id="km"  name="km" [(ngModel)]="editedCar.km" required/>
+        </div>
+        <div class="field">
+            <label for="type">type</label>
+            <input type="text" pInputText id="type"  name="type" [(ngModel)]="editedCar.type" required/>
+        </div>
+        <div class="field">
+            <label for="report">report</label>
+            <input type="text" pInputText id="report"  name="report" [(ngModel)]="editedCar.inspectionReport" required/>
+        </div>
+        <div class="field">
+            <label for="price">price</label>
+            <input type="number" pInputText id="price"  name="price" [(ngModel)]="editedCar.price" required/>
+        </div>
+        <div class="field">
+                <button pButton pRipple type="submit" label="save" class="btn btn-success"></button>
+        </div>
+    </form>
+    <div class="field">
+        <button pButton pRipple label="Cancel"  class="button" (click)="hideDialog()"></button>
+    </div>
+</p-dialog>
+
+<!-- way2 -->
+
+<p-dialog [(visible)]="productsDialog" [style]="{ width: '450px' }" header="Edit Car Details" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="picture">Picture</label>
+            <img [src]="editedCar.picture" alt="unable to load" class="block m-auto pb-3" *ngIf="editedCar.picture" />
+            <input type="text" pInputText id="picture" [(ngModel)]="editedCar.picture" required autofocus />
+        </div>
+        <div class="field">
+            <label for="brand">Brand</label>
+            <input type="text" pInputText id="brand" [(ngModel)]="editedCar.brand" required autofocus name="brand"
+                ngModel />
+            <small class="p-error" *ngIf="submitted ">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="model">Model</label>
+            <input type="text" pInputText id="model" [(ngModel)]="editedCar.model" required autofocus name="model"
+                ngModel />
+            <small class="p-error" *ngIf="submitted ">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="year">Year</label>
+            <input type="number" pInputText id="year" [(ngModel)]="editedCar.year" required autofocus />
+            <small class="p-error" *ngIf="submitted ">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="km">KM</label>
+            <input type="number" pInputText id="km" [(ngModel)]="editedCar.km" required autofocus />
+            <small class="p-error" *ngIf="submitted ">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="type">Type</label>
+            <!-- <input type="text" pInputText id="type" [(ngModel)]="editedCar.type" required autofocus /> -->
+            <!-- <p-dropdown [options]="carType" [(ngModel)]="selectedType" optionLabel="name"  placeholder="Select a City"></p-dropdown> -->
+            <!-- <p-dropdown [options]="carType" [(ngModel)]="selectedType" placeholder="Select a City" optionLabel="name" ></p-dropdown> -->
+            <p-dropdown [options]="carType" [(ngModel)]="editedCar.type" id="type">{{editedCar.type}}</p-dropdown>
+
+
+        </div>
+
+
+        <!-- <select id="propertyType" >
+            <option [ngValue]="null">Select one...</option>
+        <option *ngFor="let type of carType | keyvalue" [ngValue]="type.value">{{type.value}}</option>
+        </select> -->
+        <div class="field">
+            <label for="report">Report</label>
+            <input type="text" pInputText id="report" [(ngModel)]="editedCar.inspectionReport" required autofocus />
+            <small class="p-error" *ngIf="submitted ">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="price">Price</label>
+            <input type="number" pInputText id="price" [(ngModel)]="editedCar.price" required autofocus />
+            <small class="p-error" *ngIf="submitted ">Name is required.</small>
+        </div>
+
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+    </ng-template>
+</p-dialog>
